@@ -67,9 +67,9 @@ type Run struct {
 }
 
 type response struct {
-	Series []Series `json:"series"`
-	Games  []Game   `json:"games"`
-	Runs   []Run    `json:"runs"`
+	Series []*Series `json:"series"`
+	Games  []*Game   `json:"games"`
+	Runs   []*Run    `json:"runs"`
 }
 
 const urlBase = "https://megamanleaderboards.net/api/"
@@ -119,7 +119,7 @@ func (c *Client) getJsonRequest(endpoint string, args map[string]string) (*respo
 	return &val, nil
 }
 
-func (c *Client) GetSeries() ([]Series, error) {
+func (c *Client) GetSeries() ([]*Series, error) {
 	resp, err := c.getJsonRequest("series", nil)
 	if err != nil {
 		return nil, err
@@ -128,7 +128,7 @@ func (c *Client) GetSeries() ([]Series, error) {
 	return resp.Series, err
 }
 
-func (c *Client) GetGames() ([]Game, error) {
+func (c *Client) GetGames() ([]*Game, error) {
 	resp, err := c.getJsonRequest("games", nil)
 	if err != nil {
 		return nil, err
@@ -137,7 +137,7 @@ func (c *Client) GetGames() ([]Game, error) {
 	return resp.Games, err
 }
 
-func (c *Client) GetGameById(id int) ([]Game, error) {
+func (c *Client) GetGameById(id int) ([]*Game, error) {
 	resp, err := c.getJsonRequest("games",
 		map[string]string{"game": strconv.FormatInt(int64(id), 10)})
 	if err != nil {
@@ -150,7 +150,7 @@ func (c *Client) GetGameById(id int) ([]Game, error) {
 	return resp.Games, err
 }
 
-func (c *Client) GetGamesBySeries(series int) ([]Game, error) {
+func (c *Client) GetGamesBySeries(series int) ([]*Game, error) {
 	resp, err := c.getJsonRequest("games",
 		map[string]string{"series": strconv.FormatInt(int64(series), 10)})
 	if err != nil {
@@ -160,7 +160,7 @@ func (c *Client) GetGamesBySeries(series int) ([]Game, error) {
 	return resp.Games, err
 }
 
-func (c *Client) GetUnverifiedRuns(expanded bool) ([]Run, error) {
+func (c *Client) GetUnverifiedRuns(expanded bool) ([]*Run, error) {
 	var args map[string]string
 	if expanded {
 		args = map[string]string{"ex": "1"}
