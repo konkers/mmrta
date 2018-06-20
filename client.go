@@ -8,6 +8,7 @@ import (
 	"net/url"
 	"path"
 	"strconv"
+	"time"
 )
 
 type Client struct {
@@ -64,6 +65,10 @@ type Run struct {
 	Notes         string  `json:"notes"`
 	SubmittedBy   string  `json:"submitted_by"`
 	Rank          int     `json:"rank"`
+}
+
+func (r *Run) Duration() time.Duration {
+	return time.Duration(r.Time*10) * time.Millisecond
 }
 
 type response struct {
