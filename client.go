@@ -82,6 +82,22 @@ func (r *Run) Duration() time.Duration {
 	return time.Duration(r.Time*10) * time.Millisecond
 }
 
+func (r *Run) PrettyTime() string {
+	d := r.Duration()
+	hours := d.Truncate(time.Hour)
+	d -= hours
+	mins := d.Truncate(time.Minute)
+	d -= mins
+
+	if hours == 0.0 {
+		return fmt.Sprintf("%02d:%02d", int(mins.Minutes()), int(d.Seconds()))
+	} else {
+		return fmt.Sprintf("%d:%02d:%02d", int(hours.Hours()),
+			int(mins.Minutes()), int(d.Seconds()))
+
+	}
+}
+
 type response struct {
 	Series []*Series `json:"series"`
 	Games  []*Game   `json:"games"`
