@@ -8,8 +8,11 @@ import (
 	"net/url"
 	"path"
 	"strconv"
+	"strings"
 	"time"
 )
+
+const abbrevPrefix = "Mega Man "
 
 type Client struct {
 }
@@ -33,6 +36,10 @@ type Game struct {
 	UsesGametime int        `json:"uses_gametime"`
 	Forum        string     `json:"forum"`
 	Categories   []Category `json:"categories"`
+}
+
+func (g *Game) AbbrevName() string {
+	return strings.TrimPrefix(g.Name, abbrevPrefix)
 }
 
 type User struct {
@@ -65,6 +72,10 @@ type Run struct {
 	Notes         string  `json:"notes"`
 	SubmittedBy   string  `json:"submitted_by"`
 	Rank          int     `json:"rank"`
+}
+
+func (r *Run) AbbrevCat() string {
+	return strings.TrimPrefix(r.Category, abbrevPrefix)
 }
 
 func (r *Run) Duration() time.Duration {
