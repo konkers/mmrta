@@ -7,6 +7,7 @@ import (
 	"net/http"
 	"net/url"
 	"path"
+	"regexp"
 	"strconv"
 	"strings"
 	"time"
@@ -137,18 +138,23 @@ func (c *Client) getRequest(endpoint string, args map[string]string) ([]byte, er
 	return data, nil
 }
 
+func decodeResponse(data []byte) (*response, error) {
+	filteredString := regexp.MustCompile(`\\'`).ReplaceAllString(string(data), "'")
+	var val response
+	err := json.Unmarshal([]byte(filteredString), &val)
+	if err != nil {
+		return nil, err
+	}
+	return &val, nil
+}
+
 func (c *Client) getJsonRequest(endpoint string, args map[string]string) (*response, error) {
 	data, err := c.getRequest(endpoint, args)
 	if err != nil {
 		return nil, err
 	}
 
-	var val response
-	err = json.Unmarshal(data, &val)
-	if err != nil {
-		return nil, err
-	}
-	return &val, nil
+	return decodeResponse(data)
 }
 
 func (c *Client) GetSeries() ([]*Series, error) {
